@@ -1,0 +1,91 @@
+﻿@model AccumenSalesActivity.Models.ViewModel.LoginVM
+
+@{
+    Layout = "~/Views/Shared/_LayoutBlank.cshtml";
+
+    string messageSuccess = "";
+    string messageFailed = "";
+    if (TempData["success"] != null)
+    {
+        messageSuccess = TempData["success"].ToString();
+    }
+    else if (TempData["failed"] != null)
+    {
+        messageFailed = TempData["failed"].ToString();
+    }
+    TempData.Clear();
+}
+
+<!-- begin login -->
+<div class="login login-v2" data-pageload-addclass="animated fadeIn">
+    <!-- begin brand -->
+    <div class="login-header">
+        <div class="brand">
+            <span class="logo"></span> <b>Acumen Sales Activity</b>
+
+        </div>
+       @*  <div class="icon">
+            <i class="fa fa-sign-in-alt"></i>
+        </div> *@
+    </div>
+    <!-- end brand -->
+    <!-- begin login-content -->
+    <div class="login-content">
+
+        <form asp-controller="Home" asp-action="Login" method="post" class="margin-bottom-0">
+            <div class="form-group m-b-20">
+                <input type="text" name="UserName" id="UserName" class="form-control form-control-md" placeholder="Username" required />
+            </div>
+            <div class="form-group m-b-20">
+                <input type="password" name="Password" id="Password" class="form-control form-control-md" placeholder="Password" required />
+                <i style="color: black; float: right; margin-right: 6px; margin-top: -22px; position: relative; z-index: 2; cursor: pointer;" class="fas fa-eye" id="togglePassword"></i>
+            </div>
+            @if (!string.IsNullOrEmpty(Model.Message))
+            {
+                <span style="color: red;">@Model.Message</span>
+            }
+
+            @*<div class="checkbox checkbox-css m-b-20">
+                <input type="checkbox" id="RememberMe" name="RememberMe" />
+                <label for="RememberMe">
+                    Remember Me
+                </label>
+            </div>*@
+            <div class="login-buttons">
+                <button type="submit" class="btn btn-success btn-block btn-md">Login</button>
+            </div>
+            @* <div class="m-t-20">
+                <a href="/Admin/Home/ForgotPassword">Forgot Password?</a>
+            </div> *@
+        </form>
+    </div>
+    <!-- end login-content -->
+</div>
+<!-- end login -->
+@section scripts{
+    <script>
+
+        $(document).ready(function () {
+            debugger;
+            if ('@messageSuccess' != "") {
+                toastr["success"]("@messageSuccess", "Done");
+            }
+            else if ('@messageFailed' != "") {
+                toastr["warning"]("@messageFailed", "Error");
+            }
+            var togglePassword = document.querySelector("#togglePassword");
+            var password = document.querySelector("#Password");
+
+            togglePassword.addEventListener("click", function () {
+                // toggle the type attribute
+                const type = password.getAttribute("type") === "password" ? "text" : "password";
+                password.setAttribute("type", type);
+
+                // toggle the icon
+                this.classList.toggle("fa-eye-slash");
+            });
+       });
+
+    </script>
+
+}

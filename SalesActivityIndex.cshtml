@@ -1,0 +1,119 @@
+﻿@using AccumenSalesActivity.App_Code.GlobalClass
+@model IEnumerable<AccumenSalesActivity.Models.ViewModel.SalesPersonActivityViewDTO>
+
+@{
+    Layout = "~/Views/Shared/_LayoutLeftMenu.cshtml";
+
+}
+
+
+<div>
+    <div class="row">
+        <div class="col-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Sales Activity Summary</h4>
+                  
+                </div>
+                <div class="panel-body">
+                    @using (Html.BeginForm("Index", "Application", FormMethod.Post, new { @class = "simplification-form", @enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="row align-items-end">
+                            <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+                                <div class="form-group">
+                                    <label class="label">@Html.DisplayNameFor(x => x.ActivityId)</label>
+                                    
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+                                <div class="form-group">
+                                    <label class="label">@Html.DisplayNameFor(x => x.ActivityBy)</label>
+                                 
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+                                <div class="form-group">
+                                    <label class="label">@Html.DisplayNameFor(x => x.CustomerName)</label>
+
+                                </div>
+                            </div>
+
+                            
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group pull-right">
+                                    <label>&nbsp;</label>
+                                    <button id="searchnAdd" class="btn btn-success btn-sm  " type="submit">Search</button>
+                                    <a href="/Admin/Application/Index" class="btn btn-warning btn-sm " type="button">Reset</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (Model != null)
+                    {
+                        <table role="grid" class="table table-sm table-striped table-bordered table-td-valign-middle" id="datatablePlugin">
+                            <thead class="bg-thead">
+                                <tr>
+                                   
+                                    <th> Activity Id</th>
+                                    <th>Customer Name</th>
+                                    <th>Notes</th>
+                                    <th>Activity By</th>
+                                  @*   <th>Time Duration</th> *@
+                                    <th>Activity Date</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                
+                                    <th>Entry Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null)
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <a href="/SalesPersonActivity/SalesActivityDetails?id=@item.ActivityId" style="margin-top:2px;margin-right:5px;">
+                                                    @item.ActivityId
+                                                </a>
+                                            </td>
+
+                                            <td>@item.CustomerName</td>
+                                            <td>@item.Notes</td>
+                                            <td>@item.ActivityByEmpName </td>
+                                       @*      
+                                            <td>@TimeSpan.FromSeconds(item.TotalSpendHours * 60).ToString(@"hh\:mm\:ss") <span>h</span></td>
+ *@
+
+                                            <td>@Html.ShowNewFormattedDate(item.ActivityStartTime)</td>
+                                            <td>@Html.ShowNewFormattedTime(item.ActivityStartTime)</td>
+                                            <td>@Html.ShowNewFormattedTime(item.ActivityEndTime)</td>
+                                         @*    <td>@item.EntryByName</td> *@
+                                            <td>@Html.ShowNewFormattedDate(item.EntryDate)</td>
+                                            
+
+                                        </tr>
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
+
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        $('#datatablePlugin').DataTable();
+    </script>
+}
+
+

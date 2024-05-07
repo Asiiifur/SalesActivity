@@ -1,0 +1,462 @@
+﻿@model AccumenSalesActivity.Models.ViewModel.SalesPersonActivityViewDTO
+@using AccumenSalesActivity.App_Code.GlobalClass
+@{
+    Layout = "~/Views/Shared/_LayoutLeftMenu.cshtml";
+
+}
+@{
+    int ItmSl = 1;
+    int SpecSl = 1;
+
+}
+
+<style>
+    .activityTimezoneMain {
+        font-size: 15px;
+        margin-top: 5px;
+        font-weight: 600;
+        margin-bottom: 5px;
+        white-space: nowrap !important;
+    }
+
+    .activitysTimezoneTotal {
+        font-size: 15px;
+        margin-top: 10px;
+        font-weight: 600;
+        /*   margin-bottom: 5px; */
+        white-space: nowrap !important;
+        background-color: #50dd8f40
+    }
+
+
+    .activityTimeZoneHeader {
+        font-size: 16px;
+        font-weight: 700;
+        /* margin-bottom: 5px; */
+        white-space: nowrap !important;
+        background-color: #0aa5a591;
+        text-align: center;
+    }
+
+    .activitytimezone {
+        font-size: 14px;
+        margin-left: 40px;
+        font-weight: 550;
+    }
+
+    .activitystart {
+        margin-left: 3px;
+        border-radius: 10px;
+        text-decoration: none;
+        padding: 1px 14px;
+        /*  background: #ffffff61; */
+        color: blue;
+    }
+
+    .activitypause {
+        margin-left: 3px;
+        text-decoration: none;
+        padding: 1px 14px;
+        /*  background: #ffffff61; */
+        color: red;
+    }
+
+    .activityresume {
+        margin-left: 3px;
+        text-decoration: none;
+        padding: 1px 14px;
+        /*  background: #ffffff61; */
+        color: orange;
+    }
+
+    .activitycomplete {
+        margin-left: 3px;
+        text-decoration: none;
+        padding: 1px 14px;
+        /*  background: #ffffff61; */
+        color: green;
+    }
+
+    .activityhoursTotal {
+        text-decoration: none;
+        padding: 1px 14px;
+        /*  background: #ffffff61; */
+        color: #012401;
+    }
+
+    .activitybasicinfo {
+        margin-left: 5px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+
+    .activitydetailsbody {
+        margin-bottom: 30px;
+    }
+
+    .tableoverflow {
+        overflow-x: auto !important;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .table th, .table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+</style>
+
+<div class="row">
+    <div class="col-12">
+        <div class="panel panel-inverse">
+            <div class="panel-heading">
+                <h4 class="panel-title">Sales Activity Details Info</h4>
+
+            </div>
+
+
+            <div class="activitybasicinfo">
+                <div class="col-md-12">
+                    <div class="activityTimeZoneHeader">
+
+
+                        <span style="text-align:center">Sales Activity Details Info</span>
+
+
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6 activityBasicInfozone">
+
+                            <div>
+                                <span class="activitypause">Activity Id :</span>
+                                <span> @Model.ActivityId</span>
+
+                            </div>
+                            <h5>Activity Id : </h5><span> @Model.ActivityId</span>
+                            <h5>Activity By : </h5><span> @Model.ActivityByEmpName</span>
+                            <h5>Customer Name : @Model.CustomerName </h5>
+                            <h5>Notes : @Model.Notes </h5>
+
+                        </div>
+
+                        <div class="col-md-6">
+                            <h5>Activity Date:@Html.ShowNewFormattedDate(Model.ActivityStartTime)</h5>
+                            <h5>Activity Start Time: @Html.ShowNewFormattedTime(Model.ActivityStartTime) </h5>
+                            <h5>Activity End Time: @Html.ShowNewFormattedTime(Model.ActivityEndTime) </h5>
+
+                            <h5>
+                                Total Spend Hours: @TimeSpan.FromSeconds(Model.TotalSpendHours * 60).ToString(@"hh\:mm\:ss") <span>h</span>
+                            </h5>
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        @*  Item Details *@
+                        @if (Model.SPActivityItemDetailsViewDTOList.Count() != 0)
+                        {
+                            <div class="card activitydetailsbody">
+
+
+                                <div class="activityTimeZoneHeader">
+
+
+                                    <span style="text-align:center">Item Details Info</span>
+
+                                </div>
+                                <div class="tableoverflow">
+
+
+                                    <table role="grid" class="table table-sm table-striped table-bordered tableoverflow">
+                                        <thead class="bg-thead">
+                                            <tr>
+
+                                                <th>Sl</th>
+                                                <th>Barcode</th>
+                                                <th>Item Qty</th>
+                                                <th>Remarks</th>
+                                                <th>Item Add Time</th>
+                                                <th>Provide Sample</th>
+                                                <th>Sample Delivery Time</th>
+
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach (var item in Model.SPActivityItemDetailsViewDTOList)
+                                            {
+                                                <tr>
+                                                    <td>@ItmSl</td>
+                                                    <td>@item.Barcode</td>
+                                                    <td style="text-align:right">@item.ItemQty</td>
+                                                    <td>@item.Remarks </td>
+                                                    <td>@Html.ShowNewFormattedTime(item.DeviceSystemDateTime) </td>
+                                                    @if (item.IsSample == 0)
+                                                    {
+                                                        <td style="color:red; text-align:center">@item.ProvideSample </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="color:green;text-align:center">@item.ProvideSample </td>
+                                                    }
+                                                    <td>@Html.ShowNewFormattedTime(item.SampleDeliveryTime) </td>
+
+                                                </tr>
+                                                ItmSl++;
+                                            }
+
+
+
+                                        </tbody>
+                                    </table>
+
+
+                                </div>
+
+                            </div>
+                        }
+                        @*  Spec Details *@
+                        @if (Model.SPActivitySpecDetailsViewDTOList.Count() != 0)
+                        {
+                            <div class="card activitydetailsbody">
+
+                                <div class="activityTimeZoneHeader">
+
+
+                                    <span style="text-align:center">Specification Details Info</span>
+
+
+                                </div>
+                                <div class="tableoverflow">
+
+
+                                    <table role="grid" class="table table-sm table-striped table-bordered tableoverflow">
+                                        <thead class="bg-thead">
+                                            <tr>
+
+                                                <th>Sl</th>
+                                                <th>Design Name</th>
+                                                <th> Qty.</th>
+                                                <th>Remarks</th>
+                                                <th>Spec Add Time</th>
+
+
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach (var item in Model.SPActivitySpecDetailsViewDTOList)
+                                            {
+                                                <tr>
+                                                    <td>@SpecSl</td>
+                                                    <td>@item.DesignTempName</td>
+                                                    <td style="text-align:right">@item.SpecQty</td>
+                                                    <td>@item.Remarks </td>
+                                                    <td>@Html.ShowNewFormattedTime(item.DeviceSystemDateTime) </td>
+
+
+                                                </tr>
+                                                SpecSl++;
+                                            }
+
+
+
+                                        </tbody>
+                                    </table>
+
+
+                                </div>
+
+                            </div>
+                        }
+                        @*  Appionment Details *@
+                        @if (Model.SPACustomerAppointmentViewDTOList.Count() != 0)
+                        {
+                            <div class="card activitydetailsbody">
+
+                                <div class="activityTimeZoneHeader">
+
+
+                                    <span style="text-align:center">Appointment Details</span>
+
+
+                                </div>
+                                <div class="tableoverflow">
+
+
+                                    <table role="grid" class="table table-sm table-striped table-bordered ">
+                                        <thead class="bg-thead">
+                                            <tr>
+
+                                                <th>Sl</th>
+                                                <th>Name</th>
+                                                <th>Address</th>
+                                                <th>Appointment Time</th>
+                                                <th>Notes</th>
+                                                <th>Appointment Add Time</th>
+
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach (var item in Model.SPACustomerAppointmentViewDTOList)
+                                            {
+                                                <tr>
+                                                    <td>@ItmSl</td>
+                                                    <td>@item.CustomerId</td>
+                                                    <td>@item.Address</td>
+                                                    <td>@item.AppointmentDate</td>
+                                                    <td>@item.AppointmentDate</td>
+
+                                                </tr>
+                                                ItmSl++;
+                                            }
+
+
+
+                                        </tbody>
+                                    </table>
+
+
+                                </div>
+
+                            </div>
+                        }
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <div class="card">
+                            <div>
+                                <div class="activityTimeZoneHeader">
+
+
+                                    <span style="text-align:center">Activity Time Duration</span>
+
+
+                                </div>
+
+                                @foreach (var item in Model.SPActivityTimeDetailsMainDTOList)
+                                {
+
+                                    <div>
+                                        @if (item.WorkingStatus == 0)
+                                        {
+                                            <div class="activityTimezoneMain">
+                                                @*  <span class="date">Start</span> *@
+                                                @* <span class="time">@Html.ShowFormattedDate(item.StartTime)</span> *@
+
+                                                <span class="activitystart">Start</span>
+
+                                                <span class="text-muted fs-12px activitytimezone">@Html.ShowNewFormattedTime(item.ActivityTime) </span>
+
+
+
+
+                                            </div>
+
+                                        }
+                                        else
+                                        {
+                                            <div class="activityTimezoneMain">
+
+
+                                                <span class="activityresume">Resume</span>
+
+                                                <span class="text-muted fs-12px activitytimezone" style="margin-left:18px !important">@Html.ShowNewFormattedTime(item.ActivityTime) </span>
+
+
+
+                                            </div>
+
+                                        }
+
+
+                                        <div>
+
+                                            @if (item.WorkingStatus == 0)
+                                            {
+                                                <div class=" activityTimezoneMain">
+                                                    <span class="activitypause">Pause</span>
+
+                                                    <span class="text-muted fs-12px activitytimezone" style="margin-left:32px !important"> @Html.ShowNewFormattedTime(item.ActivityTime)   <span>[</span> @item.TimeDuration mins <span>]</span>  <i class="fa fa-clock opacity-5 ms-1"></i> </span>
+
+
+                                                </div>
+
+                                            }
+                                            else
+                                            {
+                                                <div class=" activityTimezoneMain">
+
+
+                                                    <span class="activitycomplete">Complete</span>
+
+                                                    <span class="text-muted fs-12px activitytimezone" style="margin-left:8px !important">
+                                                        @Html.ShowNewFormattedTime(item.ActivityTime)   <span>[</span> @item.TimeDuration mins <span>]</span>  <i class="fa fa-clock opacity-5 ms-1"></i>
+
+                                                    </span>
+
+
+                                                </div>
+
+                                            }
+
+
+
+                                        </div>
+
+
+
+                                    </div>
+                                }
+                                <div class=" activitysTimezoneTotal">
+
+
+                                    <span class="activityhoursTotal">Time Duration</span>
+
+                                    <span class="activityhoursTotal">@TimeSpan.FromSeconds(Model.TotalSpendHours * 60).ToString(@"hh\:mm\:ss") <span>mins</span></span>
+
+
+
+
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
