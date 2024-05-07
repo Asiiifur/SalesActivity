@@ -1,3 +1,6 @@
 # SalesActivity
 
-Sales Person Activity Traking Application
+Sales Person Activity Tracking Application
+
+
+
